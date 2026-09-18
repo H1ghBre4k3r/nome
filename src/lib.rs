@@ -14,7 +14,7 @@ macro_rules! construct_args {
 
 #[macro_export]
 macro_rules! func {
-    ($d:tt $ident:ident, |$($name:ident: $type:ty),+ $(,)?| { $($stmt:stmt)* }) => {
+    ($d:tt $ident:ident, |$($name:ident: $type:ty),+ $(,)?| $(-> $return_type:ty)? { $($stmt:stmt)* }) => {
         mod $ident {
             use super::*;
 
@@ -26,14 +26,14 @@ macro_rules! func {
 
         macro_rules! $ident {
             () => {
-                $ident(Default::default());
+                $ident(Default::default())
             };
             ($d($fargs:tt)+) => {
-                $ident($crate::construct_args!($ident { $d($fargs)+ }));
+                $ident($crate::construct_args!($ident { $d($fargs)+ }))
             };
         }
 
-        fn $ident(__arg: $ident::__Args) {
+        fn $ident(__arg: $ident::__Args) $(-> $return_type)? {
             let $ident::__Args { $($name),+ } = __arg;
             $($stmt)*
         }
