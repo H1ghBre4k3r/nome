@@ -1,7 +1,14 @@
 #[macro_export]
 macro_rules! construct_args {
     ($arg:ident { $($name:ident = $value:expr),+ $(,)? }) => {
-        $arg::__Args { $($name: $value),+, ..Default::default() }
+        {
+            #![allow(
+                clippy::needless_update,
+                reason = "struct update supports callers that omit fields"
+            )]
+            let arg = $arg::__Args { $($name: $value),+, ..Default::default() };
+            arg
+        }
     };
 }
 
