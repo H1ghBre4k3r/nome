@@ -8,4 +8,5 @@ fn main() {
     foo!();
     foo!(x = 5);
     foo!(y = 7);
+    foo!(x = 5, y = 7);
 }
